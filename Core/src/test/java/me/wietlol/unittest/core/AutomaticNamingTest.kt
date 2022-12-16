@@ -1,9 +1,8 @@
 package me.wietlol.unittest.core
 
-import me.wietlol.unittest.core.models.TestModule
 import org.junit.Test
 
-class AutomaticNamingTest : TestModule
+class AutomaticNamingTest : LocalTestModule()
 {
 	@Test
 	fun `assert that the name of the function is used in the report`()

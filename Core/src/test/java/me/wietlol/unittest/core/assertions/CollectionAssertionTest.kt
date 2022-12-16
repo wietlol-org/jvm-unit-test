@@ -1,9 +1,9 @@
 package me.wietlol.unittest.core.assertions
 
-import me.wietlol.unittest.core.models.TestModule
+import me.wietlol.unittest.core.LocalTestModule
 import org.junit.Test
 
-class CollectionAssertionTest : TestModule
+class CollectionAssertionTest : LocalTestModule()
 {
 	private val successValues = listOf(1, 2, 3)
 	private val failureValues = listOf(1, -2, 3)

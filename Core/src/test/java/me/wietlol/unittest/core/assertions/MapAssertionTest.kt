@@ -1,9 +1,9 @@
 package me.wietlol.unittest.core.assertions
 
-import me.wietlol.unittest.core.models.TestModule
+import me.wietlol.unittest.core.LocalTestModule
 import org.junit.Test
 
-class MapAssertionTest : TestModule
+class MapAssertionTest : LocalTestModule()
 {
 	@Test
 	fun `assert that map{} starts a new assertion sequence`()

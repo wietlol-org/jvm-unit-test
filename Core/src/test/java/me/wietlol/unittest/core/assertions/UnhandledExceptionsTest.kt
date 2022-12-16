@@ -1,9 +1,9 @@
 package me.wietlol.unittest.core.assertions
 
-import me.wietlol.unittest.core.models.TestModule
+import me.wietlol.unittest.core.LocalTestModule
 import org.junit.Test
 
-class UnhandledExceptionsTest : TestModule
+class UnhandledExceptionsTest : LocalTestModule()
 {
 	@Test
 	fun `assert that exceptions do not prevent reports`() = unitTest {

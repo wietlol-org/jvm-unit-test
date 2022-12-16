@@ -279,13 +279,14 @@ class TestCase(
 		LazyList(this)
 	
 	// todo
+	//  - assertThat(isValid) (without following validations) should throw an error
+	//  - Assertion<Iterable<T>>.isEmpty(value: T): AssertionResult<Iterable<T>>
 	//  - Assertion<Iterable<T>>.contains(value: T): AssertionResult<Iterable<T>>
 	//  - Assertion<Iterable<T>>.containsAll(values: Iterable<T>): AssertionResult<Iterable<T>>
+	//  - Assertion<Iterable<T>>.containsExactly(values: Iterable<T>): AssertionResult<Iterable<T>>
+	//  - Assertion<Iterable<T>>.containsExactly(vararg values: Array<T>): AssertionResult<Iterable<T>>
 	//  - X Assertion<Iterable<T>>.allMatch(filter: (Assertion<T>) -> AssertionResult<T>): AssertionResult<Iterable<T>>
 	//  - X Assertion<Iterable<T>>.anyMatch(filter: (Assertion<T>) -> AssertionResult<T>): AssertionResult<Iterable<T>>
 	//  - X Assertion<Iterable<T>>.oneMatch(filter: (Assertion<T>) -> AssertionResult<T>): AssertionResult<Iterable<T>>
 	//  - X Assertion<Iterable<T>>.noneMatch(filter: (Assertion<T>) -> AssertionResult<T>): AssertionResult<Iterable<T>>
-	//  -
-	//  - run fast jvm applications in lambda (<1s cold start pls)
-	//  - run test using script (only to test)
 }

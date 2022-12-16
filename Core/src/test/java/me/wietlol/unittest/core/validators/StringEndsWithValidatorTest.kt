@@ -1,10 +1,10 @@
 package me.wietlol.unittest.core.validators
 
-import me.wietlol.unittest.core.models.TestModule
+import me.wietlol.unittest.core.LocalTestModule
 import me.wietlol.unittest.core.models.TestOptions
 import org.junit.Test
 
-class StringEndsWithValidatorTest : TestModule
+class StringEndsWithValidatorTest : LocalTestModule()
 {
 	@Test
 	fun `assert that success message displays the tail`()

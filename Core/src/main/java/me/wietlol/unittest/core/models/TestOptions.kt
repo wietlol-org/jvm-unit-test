@@ -1,6 +1,7 @@
 package me.wietlol.unittest.core.models
 
 import com.fasterxml.jackson.databind.json.JsonMapper
+import java.io.PrintStream
 import java.time.format.DateTimeFormatter
 
 data class TestOptions(
@@ -11,4 +12,5 @@ data class TestOptions(
 	val timeFormatters: List<DateTimeFormatter> = listOf(DateTimeFormatter.ISO_LOCAL_TIME),
 	val dateTimeFormatters: List<DateTimeFormatter> = listOf(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
 	val mapper: JsonMapper = JsonMapper(),
+	val output: PrintStream? = System.out,
 )

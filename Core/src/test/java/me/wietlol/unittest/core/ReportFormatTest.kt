@@ -1,9 +1,8 @@
 package me.wietlol.unittest.core
 
-import me.wietlol.unittest.core.models.TestModule
 import org.junit.Test
 
-class ReportFormatTest : TestModule
+class ReportFormatTest : LocalTestModule()
 {
 	@Test
 	fun `assert that texts with newlines are trimmed to retain format`()
@@ -39,3 +38,4 @@ class ReportFormatTest : TestModule
 		}
 	}
 }
+

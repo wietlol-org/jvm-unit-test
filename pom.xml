@@ -27,7 +27,7 @@
 		<kotlin-maven.jvm-target>${project.java.version}</kotlin-maven.jvm-target>
 		
 		<jackson.version>2.13.3</jackson.version>
-		<utils.version>1.0.2</utils.version>
+		<utils.version>1.0.3-SNAPSHOT</utils.version>
 	</properties>
 	
 	<dependencies>

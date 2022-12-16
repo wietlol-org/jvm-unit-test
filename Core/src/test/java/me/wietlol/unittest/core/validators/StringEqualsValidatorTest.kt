@@ -1,10 +1,10 @@
 package me.wietlol.unittest.core.validators
 
-import me.wietlol.unittest.core.models.TestModule
+import me.wietlol.unittest.core.LocalTestModule
 import me.wietlol.unittest.core.models.TestOptions
 import org.junit.Test
 
-class StringEqualsValidatorTest : TestModule
+class StringEqualsValidatorTest : LocalTestModule()
 {
 	@Test
 	fun `assert that validating an empty string, does not throw an exception`()

@@ -1,9 +1,9 @@
 package me.wietlol.unittest.core.exampletests
 
-import me.wietlol.unittest.core.models.TestModule
+import me.wietlol.unittest.core.LocalTestModule
 import org.junit.Test
 
-class StringTest : TestModule
+class StringTest : LocalTestModule()
 {
 	@Test
 	fun foo()
