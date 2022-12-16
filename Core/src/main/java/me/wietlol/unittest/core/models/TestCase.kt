@@ -5,7 +5,9 @@ import me.wietlol.unittest.core.assertions.AssertionResult
 import me.wietlol.unittest.core.assertions.ValueAssertion
 import me.wietlol.unittest.core.validators.*
 import me.wietlol.utils.common.append
+import me.wietlol.utils.common.collections.BufferedSequence
 import me.wietlol.utils.common.collections.LazyList
+import me.wietlol.utils.common.collections.buffered
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -228,7 +230,7 @@ class TestCase(
 		val match: Validator<Iterable<T>> = AllMatchValidator(options, assertion, this@TestCase)
 //		val validator: Validator<Iterable<T>> = ShallowMapperValidator<Iterable<T>, List<T>>(match) { it.asList() }
 		return take { it.asList() }.assert(match)
-		
+
 //		return assert(ShallowMapperValidator<Iterable<T>, List<T>>(AllMatchValidator<T>(options, assertion, this@TestCase)) { it.asList() })
 	}
 	
@@ -238,30 +240,109 @@ class TestCase(
 		val match: Validator<Iterable<T>> = AllMatchValidator(options, assertion, this@TestCase)
 //		val validator: Validator<List<T>> = ShallowMapperValidator<Sequence<T>, List<T>>(match) { it.asList() }
 		return take { it.asList() }.assert(match)
-		
+
 //		return assert(ShallowMapperValidator(AllMatchValidator(options, assertion, this@TestCase)) { LazyList(it) })
 	}
 	
-	fun <T> Assertion<Iterable<T>>.anyMatch(assertion: (Assertion<T>) -> AssertionResult<T>): AssertionResult<List<T>> =
-		TODO()
+	fun <T> Assertion<Iterable<T>>.anyMatch(assertion: (Assertion<T>) -> AssertionResult<T>): AssertionResult<List<T>>
+	{
+		val match: Validator<Iterable<T>> = AnyMatchValidator(options, assertion, this@TestCase)
+		return take { it.asList() }.assert(match)
+	}
 	
 	@JvmName("anyMatchSequence")
-	fun <T> Assertion<Sequence<T>>.anyMatch(assertion: (Assertion<T>) -> AssertionResult<T>): AssertionResult<List<T>> =
-		TODO()
+	fun <T> Assertion<Sequence<T>>.anyMatch(assertion: (Assertion<T>) -> AssertionResult<T>): AssertionResult<List<T>>
+	{
+		val match: Validator<Iterable<T>> = AnyMatchValidator(options, assertion, this@TestCase)
+		return take { it.asList() }.assert(match)
+	}
 	
-	fun <T> Assertion<Iterable<T>>.oneMatch(assertion: (Assertion<T>) -> AssertionResult<T>): AssertionResult<List<T>> =
-		TODO()
+	fun <T> Assertion<Iterable<T>>.oneMatch(assertion: (Assertion<T>) -> AssertionResult<T>): AssertionResult<List<T>>
+	{
+		val match: Validator<Iterable<T>> = OneMatchValidator(options, assertion, this@TestCase)
+		return take { it.asList() }.assert(match)
+	}
 	
 	@JvmName("oneMatchSequence")
-	fun <T> Assertion<Sequence<T>>.oneMatch(assertion: (Assertion<T>) -> AssertionResult<T>): AssertionResult<List<T>> =
-		TODO()
+	fun <T> Assertion<Sequence<T>>.oneMatch(assertion: (Assertion<T>) -> AssertionResult<T>): AssertionResult<List<T>>
+	{
+		val match: Validator<Iterable<T>> = OneMatchValidator(options, assertion, this@TestCase)
+		return take { it.asList() }.assert(match)
+	}
 	
-	fun <T> Assertion<Iterable<T>>.noneMatch(assertion: (Assertion<T>) -> AssertionResult<T>): AssertionResult<List<T>> =
-		TODO()
+	fun <T> Assertion<Iterable<T>>.noneMatch(assertion: (Assertion<T>) -> AssertionResult<T>): AssertionResult<List<T>>
+	{
+		val match: Validator<Iterable<T>> = NoneMatchValidator(options, assertion, this@TestCase)
+		return take { it.asList() }.assert(match)
+	}
 	
 	@JvmName("noneMatchSequence")
-	fun <T> Assertion<Sequence<T>>.noneMatch(assertion: (Assertion<T>) -> AssertionResult<T>): AssertionResult<List<T>> =
-		TODO()
+	fun <T> Assertion<Sequence<T>>.noneMatch(assertion: (Assertion<T>) -> AssertionResult<T>): AssertionResult<List<T>>
+	{
+		val match: Validator<Iterable<T>> = NoneMatchValidator(options, assertion, this@TestCase)
+		return take { it.asList() }.assert(match)
+	}
+	
+	@JvmName("isEmptyList")
+	fun <T> Assertion<Iterable<T>>.isEmpty(): AssertionResult<List<T>> =
+		take { it.asList() }
+			.assert(EmptyListValidator(options, true))
+	
+	@JvmName("isEmptySequence")
+	fun <T> Assertion<Sequence<T>>.isEmpty(): AssertionResult<BufferedSequence<T>> =
+		take { it.buffered() }
+			.assert(EmptySequenceValidator(options, true))
+	
+	@JvmName("isNotEmptyList")
+	fun <T> Assertion<Iterable<T>>.isNotEmpty(): AssertionResult<List<T>> =
+		take { it.asList() }
+			.assert(EmptyListValidator(options, false))
+	
+	@JvmName("isNotEmptySequence")
+	fun <T> Assertion<Sequence<T>>.isNotEmpty(): AssertionResult<BufferedSequence<T>> =
+		take { it.buffered() }
+			.assert(EmptySequenceValidator(options, false))
+	
+	fun <T> Assertion<Iterable<T>>.contains(needle: T): AssertionResult<List<T>> =
+		take { it.asList() }
+			.assert(ContainsCollectionValidator(options, needle))
+	
+	@JvmName("containsSequence")
+	fun <T> Assertion<Sequence<T>>.contains(needle: T): AssertionResult<BufferedSequence<T>> =
+		take { it.buffered() }
+			.assert(ContainsSequenceValidator(options, needle))
+	
+	fun <T> Assertion<Iterable<T>>.containsAll(needles: Iterable<T>): AssertionResult<List<T>> =
+		take { it.asList() }
+			.assert(ContainsAllCollectionValidator(options, needles.toList()))
+	
+	fun <T> Assertion<Iterable<T>>.containsAll(vararg needles: T): AssertionResult<List<T>> =
+		containsAll(needles.toList())
+	
+	@JvmName("containsAllSequence")
+	fun <T> Assertion<Sequence<T>>.containsAll(needles: Iterable<T>): AssertionResult<BufferedSequence<T>> =
+		take { it.buffered() }
+			.assert(ContainsAllSequenceValidator(options, needles.toList()))
+	
+	@JvmName("containsAllSequence")
+	fun <T> Assertion<Sequence<T>>.containsAll(vararg needles: T): AssertionResult<BufferedSequence<T>> =
+		containsAll(needles.toList())
+	
+	fun <T> Assertion<Iterable<T>>.containsExactly(needles: Iterable<T>): AssertionResult<List<T>> =
+		take { it.asList() }
+			.assert(ContainsExactlyCollectionValidator(options, needles.toList()))
+	
+	fun <T> Assertion<Iterable<T>>.containsExactly(vararg needles: T): AssertionResult<List<T>> =
+		containsExactly(needles.toList())
+	
+	@JvmName("containsExactlySequence")
+	fun <T> Assertion<Sequence<T>>.containsExactly(needles: Iterable<T>): AssertionResult<BufferedSequence<T>> =
+		take { it.buffered() }
+			.assert(ContainsExactlySequenceValidator(options, needles.toList()))
+	
+	@JvmName("containsExactlySequence")
+	fun <T> Assertion<Sequence<T>>.containsExactly(vararg needles: T): AssertionResult<BufferedSequence<T>> =
+		containsExactly(needles.toList())
 	
 	fun <K, V> Assertion<Map<K, V>>.forKey(key: K): AssertionResult<V?>
 	{
@@ -277,16 +358,4 @@ class TestCase(
 	
 	private fun <E> Sequence<E>.asList(): List<E> =
 		LazyList(this)
-	
-	// todo
-	//  - assertThat(isValid) (without following validations) should throw an error
-	//  - Assertion<Iterable<T>>.isEmpty(value: T): AssertionResult<Iterable<T>>
-	//  - Assertion<Iterable<T>>.contains(value: T): AssertionResult<Iterable<T>>
-	//  - Assertion<Iterable<T>>.containsAll(values: Iterable<T>): AssertionResult<Iterable<T>>
-	//  - Assertion<Iterable<T>>.containsExactly(values: Iterable<T>): AssertionResult<Iterable<T>>
-	//  - Assertion<Iterable<T>>.containsExactly(vararg values: Array<T>): AssertionResult<Iterable<T>>
-	//  - X Assertion<Iterable<T>>.allMatch(filter: (Assertion<T>) -> AssertionResult<T>): AssertionResult<Iterable<T>>
-	//  - X Assertion<Iterable<T>>.anyMatch(filter: (Assertion<T>) -> AssertionResult<T>): AssertionResult<Iterable<T>>
-	//  - X Assertion<Iterable<T>>.oneMatch(filter: (Assertion<T>) -> AssertionResult<T>): AssertionResult<Iterable<T>>
-	//  - X Assertion<Iterable<T>>.noneMatch(filter: (Assertion<T>) -> AssertionResult<T>): AssertionResult<Iterable<T>>
 }

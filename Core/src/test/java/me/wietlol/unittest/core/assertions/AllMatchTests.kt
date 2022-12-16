@@ -1,23 +1,31 @@
 package me.wietlol.unittest.core.assertions
 
 import me.wietlol.unittest.core.LocalTestModule
+import me.wietlol.unittest.core.models.TestCase
 import org.junit.Test
 
-class CollectionAssertionTest : LocalTestModule()
+class AllMatchTests : LocalTestModule()
 {
 	private val successValues = listOf(1, 2, 3)
 	private val failureValues = listOf(1, -2, 3)
+	
+	private fun TestCase.test(value: Assertion<Int>): AssertionResult<Int> =
+		value.isGreaterThan(0)
+	
+	private fun fail(): Nothing =
+		throw Exception("unexpected exception")
 	
 	@Test
 	fun `assert that allMatch, on success, gives summarized results for the last element in the collection`()
 	{
 		val result = test {
 			assertThat(successValues)
-				.allMatch { it.isGreaterThan(0) }
+				.allMatch { test(it) }
 		}
 		
 		assert {
 			assertThat(result)
+				.assert("is success") { it.isSuccess() }
 				.property { ::testResults }
 				.map { it[1] }
 				.property { ::message }
@@ -30,11 +38,12 @@ class CollectionAssertionTest : LocalTestModule()
 	{
 		val result = test {
 			assertThat(failureValues)
-				.allMatch { it.isGreaterThan(0) }
+				.allMatch { test(it) }
 		}
 		
 		assert {
 			assertThat(result)
+				.assert("is failure") { it.isSuccess().not() }
 				.property { ::testResults }
 				.map { it[1] }
 				.property { ::message }
@@ -47,15 +56,22 @@ class CollectionAssertionTest : LocalTestModule()
 	{
 		val result = test {
 			assertThat(failureValues)
-				.allMatch { it.isGreaterThan(0) }
+				.allMatch { test(it) }
 		}
 		
 		assert {
 			assertThat(result)
+				.assert("is failure") { it.isSuccess().not() }
 				.property { ::testResults }
 				.map { it[3] }
 				.property { ::message }
-				.isEqualTo("'allMatch()' assertion failed for element at 'it[1]' (size: 3)")
+				.isEqualTo(
+					"""
+						|	'allMatch { ... }' assertion failed:
+						|		element: it[1]
+						|		size:    3
+					""".trimMargin("|")
+				)
 		}
 	}
 	
@@ -64,15 +80,20 @@ class CollectionAssertionTest : LocalTestModule()
 	{
 		val result = test {
 			assertThat(successValues)
-				.allMatch { it.isGreaterThan(0) }
+				.allMatch { test(it) }
 		}
 		
 		assert {
 			assertThat(result)
+				.assert("is success") { it.isSuccess() }
 				.property { ::testResults }
 				.map { it[3] }
 				.property { ::message }
-				.isEqualTo("'allMatch()' assertion succeeded on all (3) elements")
+				.isEqualTo(
+					"""
+						|	'allMatch { ... }' assertion succeeded
+					""".trimMargin("|")
+				)
 		}
 	}
 	
@@ -81,11 +102,12 @@ class CollectionAssertionTest : LocalTestModule()
 	{
 		val result = test {
 			assertThat(successValues)
-				.allMatch { throw Exception("unexpected exception") }
+				.allMatch { fail() }
 		}
 		
 		assert {
 			assertThat(result)
+				.assert("is failure") { it.isSuccess().not() }
 				.property { ::testResults }
 				.map { it[2] }
 				.property { ::message }
@@ -108,7 +130,7 @@ class CollectionAssertionTest : LocalTestModule()
 		
 		val result = test {
 			assertThat(lazyValues)
-				.allMatch { it.isGreaterThan(0) }
+				.allMatch { test(it) }
 		}
 		
 		assert {
@@ -116,6 +138,7 @@ class CollectionAssertionTest : LocalTestModule()
 				.isEqualTo(1)
 			
 			assertThat(result)
+				.assert("is success") { it.isSuccess() }
 				.property { ::testResults }
 				.map { it[0] }
 				.property { ::message }
@@ -124,44 +147,27 @@ class CollectionAssertionTest : LocalTestModule()
 	}
 	
 	@Test
-	fun `assert that assertThat provides correct information for iterables`()
+	fun `assert that allMatch, on success, only consumes the feed sequence once`()
 	{
-		class ProxyIterable<E>(
-			val values: Iterable<E>
-		) : Iterable<E> by values
-		
-		val numbers = ProxyIterable(listOf(1, 2, 3))
-		
-		val result = test {
-			assertThat(numbers)
-				.allMatch { it.isGreaterThan(0) }
-		}
-		
-		assert {
-			assertThat(result)
-				.property { ::testResults }
-				.map { it[0] }
-				.property { ::message }
-				.isEqualTo("validating value Iterable<E> { ... }")
-		}
-	}
-	
-	@Test
-	fun `assert that assertThat provides correct information for sequences`()
-	{
-		val numbers = sequence {
+		var consumptions = 0
+		val lazyValues = sequence {
+			consumptions++
 			yield(1)
 			yield(2)
 			yield(3)
 		}
 		
 		val result = test {
-			assertThat(numbers)
-				.allMatch { it.isGreaterThan(0) }
+			assertThat(lazyValues)
+				.allMatch { test(it) }
 		}
 		
 		assert {
+			assertThat(consumptions)
+				.isEqualTo(1)
+			
 			assertThat(result)
+				.assert("is success") { it.isSuccess() }
 				.property { ::testResults }
 				.map { it[0] }
 				.property { ::message }

@@ -1,8 +1,7 @@
 package me.wietlol.unittest.core.assertions
 
+import me.wietlol.unittest.core.HiddenTestModule
 import me.wietlol.unittest.core.LocalTestModule
-import me.wietlol.unittest.core.models.TestModule
-import me.wietlol.unittest.core.models.TestOptions
 import org.junit.Test
 
 class BaseTests : LocalTestModule()
@@ -22,10 +21,5 @@ class BaseTests : LocalTestModule()
 			.property { ::message }
 			.isNotNull()
 			.startsWith("Test case has no validations: ")
-	}
-	
-	class HiddenTestModule : TestModule
-	{
-		override val options = TestOptions(output = null)
 	}
 }

@@ -83,7 +83,7 @@ class TestReport(
 		testResults.all { it.message.startsWith("validating value ") }
 	
 	fun isSuccess(): Boolean =
-		testResults.all { it.isValid }
+		!isIndecisive() && testResults.all { it.isValid }
 	
 	private fun format(duration: Duration): String
 	{

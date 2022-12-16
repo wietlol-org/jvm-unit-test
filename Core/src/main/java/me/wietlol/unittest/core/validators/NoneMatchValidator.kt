@@ -6,7 +6,7 @@ import me.wietlol.unittest.core.models.TestCase
 import me.wietlol.unittest.core.models.TestFailedException
 import me.wietlol.unittest.core.models.TestOptions
 
-class AllMatchValidator<T>(
+class NoneMatchValidator<T>(
 	override val options: TestOptions,
 	val assertion: (Assertion<T>) -> AssertionResult<T>,
 	val testCase: TestCase
@@ -19,29 +19,45 @@ class AllMatchValidator<T>(
 		
 		val list = value.toList()
 		
+		var matchIndex = -1
 		val results: List<AssertionResult<T>> = list
 			.asSequence()
-			.map { element ->
+			.mapIndexed { i, element ->
+				matchIndex = i
 				runCatching {
 					reset(accumulatedResults, resetSize)
 					assertion(testCase.assertThat(element))
 				}
 			}
-			.takeWhile { it.isSuccess || it.exceptionOrNull() !is TestFailedException }
+			.dropWhile { it.isFailure && it.exceptionOrNull() is TestFailedException }
+			.take(1)
 			.map { it.getOrThrow() }
 			.toList()
-		val isValid = results.size == list.size
-		val message = generateMessage(list, results, isValid)
+		
+		val isValid = results.isEmpty()
+		if (isValid)
+		{
+			// adjust results to assume they failed successfully
+			(resetSize until accumulatedResults.size).forEach { index ->
+				val result = accumulatedResults[index]
+				accumulatedResults[index] = result.copy(
+					isValid = true,
+					message = result.message.replace(" assertion failed", " assertion failed successfully"),
+				)
+			}
+		}
+		
+		val message = generateMessage(list, matchIndex, isValid)
 		return Validation(isValid, message)
 	}
 	
-	private fun generateMessage(value: List<T>, results: List<AssertionResult<T>>, isValid: Boolean): String =
+	private fun generateMessage(value: List<T>, index: Int, isValid: Boolean): String =
 		if (isValid)
-			"$messageIndent'allMatch { ... }' assertion succeeded"
+			"$messageIndent'noneMatch { ... }' assertion succeeded"
 		else
-			"$messageIndent'allMatch { ... }' assertion failed:\n" +
-				"${subMessageIndent}element: it[${results.size}]\n" +
-				"${subMessageIndent}size:    ${value.size}"
+			"$messageIndent'noneMatch { ... }' assertion failed:\n" +
+				"${subMessageIndent}match: it[$index]\n" +
+				"${subMessageIndent}size:  ${value.size}"
 	
 	private fun reset(list: MutableList<*>, size: Int)
 	{

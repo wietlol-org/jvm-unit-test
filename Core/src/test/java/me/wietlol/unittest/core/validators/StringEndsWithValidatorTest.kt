@@ -16,7 +16,7 @@ class StringEndsWithValidatorTest : LocalTestModule()
 		val result = validator.validate(value)
 		
 		assert {
-			assertThat(result.message as CharSequence).isEqualTo(
+			assertThat(result.message).isEqualTo(
 				"""
 					|	'endsWith(tail="world!", ignoreCase=true)' assertion succeeded
 				""".trimMargin("|")
@@ -34,7 +34,7 @@ class StringEndsWithValidatorTest : LocalTestModule()
 		val result = validator.validate(value)
 		
 		assert {
-			assertThat(result.message as CharSequence).isEqualTo(
+			assertThat(result.message).isEqualTo(
 				"""
 					|	'endsWith(tail="wrld!", ignoreCase=true)' assertion failed:
 					|		value: "Hello, World!"
@@ -57,7 +57,7 @@ class StringEndsWithValidatorTest : LocalTestModule()
 		val result = validator.validate(value)
 		
 		assert {
-			assertThat(result.message as CharSequence).isEqualTo(
+			assertThat(result.message).isEqualTo(
 				"""
 					|	'endsWith(tail="...hijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz", ignoreCase=true)' assertion succeeded
 				""".trimMargin("|")
@@ -77,7 +77,7 @@ class StringEndsWithValidatorTest : LocalTestModule()
 		val result = validator.validate(value)
 		
 		assert {
-			assertThat(result.message as CharSequence).isEqualTo(
+			assertThat(result.message).isEqualTo(
 				"""
 					|	'endsWith(tail="...ghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnoqrstuvwxyzabcdefghijklmnopqrstuvwxyz", ignoreCase=true)' assertion failed:
 					|		value: "...hijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"
@@ -100,7 +100,7 @@ class StringEndsWithValidatorTest : LocalTestModule()
 		val result = validator.validate(value)
 		
 		assert {
-			assertThat(result.message as CharSequence).isEqualTo(
+			assertThat(result.message).isEqualTo(
 				"""
 					|	'endsWith(tail="...ghijklmnopqrstuvwxyzabcdefghijlmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz", ignoreCase=true)' assertion failed:
 					|		value: "...qrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdef..."
@@ -123,7 +123,7 @@ class StringEndsWithValidatorTest : LocalTestModule()
 		val result = validator.validate(value)
 		
 		assert {
-			assertThat(result.message as CharSequence).isEqualTo(
+			assertThat(result.message).isEqualTo(
 				"""
 					|	'endsWith(tail="...hijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz", ignoreCase=true)' assertion failed:
 					|		value: "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrs..."
@@ -144,7 +144,7 @@ class StringEndsWithValidatorTest : LocalTestModule()
 		val result = validator.validate(value)
 		
 		assert {
-			assertThat(result.message as CharSequence).isEqualTo(
+			assertThat(result.message).isEqualTo(
 				"""
 					|	'endsWith(tail="abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz", ignoreCase=true)' assertion failed:
 					|		value:                           "abcdefghijklmnopqrstuvwxyz"
@@ -165,7 +165,7 @@ class StringEndsWithValidatorTest : LocalTestModule()
 		val result = validator.validate(value)
 		
 		assert {
-			assertThat(result.message as CharSequence).isEqualTo(
+			assertThat(result.message).isEqualTo(
 				"""
 					|	'endsWith(tail=" world!", ignoreCase=true)' assertion failed:
 					|		value: "Hello,\tWorld!"
@@ -186,7 +186,7 @@ class StringEndsWithValidatorTest : LocalTestModule()
 		val result = validator.validate(value)
 		
 		assert {
-			assertThat(result.message as CharSequence).isEqualTo(
+			assertThat(result.message).isEqualTo(
 				"""
 					|	'endsWith(tail="a,\tworld!", ignoreCase=true)' assertion failed:
 					|		value: "Hello,\tWorld!"
