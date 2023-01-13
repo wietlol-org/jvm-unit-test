@@ -65,7 +65,7 @@ private fun File.isProjectFolder(): Boolean =
 private fun extractEventIds(fileData: FileData): Sequence<EventIdUsage>
 {
 	val eventIdVariableDeclarationPattern = Regex("(?<variable>\\w+)\\s*(?::\\s*EventId)?\\s*=\\s*EventId\\(\\s*(?<id>\\d+)\\s*,\\s*\"(?<name>[^\"]*)\"\\s*\\)")
-	val eventIdPattern = Regex("logger.log[a-zA-Z]*\\(\\s*(?:EventId\\(\\s*(?<id>\\d+)\\s*,\\s*\"(?<name>[^\"]*)\"\\s*\\)|(?<variable>\\w+)\\s*,)")
+	val eventIdPattern = Regex("ogger.log[a-zA-Z]*\\(\\s*(?:EventId\\(\\s*(?<id>\\d+)\\s*,\\s*\"(?<name>[^\"]*)\"\\s*\\)|(?<variable>\\w+)\\s*,)")
 	
 	val variables = mutableMapOf<String, Pair<String, String>>()
 	
