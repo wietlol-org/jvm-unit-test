@@ -61,14 +61,21 @@ class TestReport(
 		{
 			case.options.output?.apply {
 				println("This test is indecisive as it has no validations applied on the values that it tests against.")
-				println("This is pobably because the test only contains assertions like the following:")
-				println("\tassertThat(true)")
-				println("\tassertThat(false)")
-				println("\tassertThat(myBoolean)")
-				println()
-				println("The assertThat(value) function only specifies that this value is a value to apply tests on, but does no validation by itself.")
-				println("Validating booleans works the same as every other value, which means that you have to follow up on the assertThat(value) call with a validation call.")
-				println("In the case of validating booleans, following up with an .isTrue() or .isFalse() is probably sufficient.")
+				if (testResults.isEmpty())
+				{
+					println("This is probably because the test code does not contain any assertions or the assertions did not run due to conditional flow or lazy processing.")
+				}
+				else
+				{
+					println("This is probably because the test only contains assertions like the following:")
+					println("\tassertThat(true)")
+					println("\tassertThat(false)")
+					println("\tassertThat(myBoolean)")
+					println()
+					println("The assertThat(value) function only specifies that this value is a value to apply tests on, but does no validation by itself.")
+					println("Validating booleans works the same as every other value, which means that you have to follow up on the assertThat(value) call with a validation call.")
+					println("In the case of validating booleans, following up with an .isTrue() or .isFalse() is probably sufficient.")
+				}
 			}
 			
 			throw AssertionError("Test case has no validations: ${case.name}.")
